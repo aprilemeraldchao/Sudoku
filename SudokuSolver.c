@@ -22,7 +22,7 @@ void getNumSolutions(int row, int col, int *count) {
                 grid[row][col] = i + 1;
                 getNumSolutions(row, col + 1, count);
                 grid[row][col] = EMPTY;
-                if (*count > 1000) {
+                if (*count > 100000) {
                     return;
                 }
             }

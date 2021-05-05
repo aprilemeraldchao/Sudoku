@@ -17,7 +17,7 @@ int numEntered;
 void showPanel();
 void resetGrid();
 void genGrid();
-void updateGrid(int row, int col, int num);
+void updateGrid(int row, int col, int num, bool isGiven);
 
 int main(void) {
     printWelcomeMessage();
@@ -40,8 +40,8 @@ int main(void) {
                 resetGrid();
                 genGrid();
                 showPanel();
-            } else if (command == 'r') {
-                printWelcomeMessage();
+            } else if (command == 'h') {
+                printHelpMessage();
             } else if (command != '\n') {
                 printCommandErrorMessage();
             }
@@ -55,7 +55,7 @@ int main(void) {
             if (row < 0 || row > 8 || col < 0 || col > 8 || num < EMPTY || num > 9) {
                 printCommandErrorMessage();
             } else {
-                updateGrid(row, col, num);
+                updateGrid(row, col, num, true);
                 showPanel();
             }
         } else {
@@ -155,15 +155,12 @@ void genGrid() {
     valid = true;
 }
 
-void updateGrid(int row, int col, int num) {
+void updateGrid(int row, int col, int num, bool isGiven) {
     if (num == EMPTY) {
-        given[row][col] = false;
         numEntered -= 1;
-    } else {
-        if (!valid)
-            given[row][col] = true;
-        if (grid[row][col] == EMPTY)
-            numEntered += 1;
+    } else if (grid[row][col] == EMPTY) {
+        numEntered += 1;
     }
     grid[row][col] = num;
+    given[row][col] = isGiven;
 }

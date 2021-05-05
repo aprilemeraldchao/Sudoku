@@ -12,6 +12,7 @@ extern int numEntered;
 void printTitle();
 void printWelcomeMessage();
 void printEndMessage();
+void printHelpMessage();
 void printCommandErrorMessage();
 void printPrompt();
 void printGrid();
@@ -31,7 +32,7 @@ void printWelcomeMessage() {
     printTitle();
     printf("Welcome to Sudoku Maker!\n\n");
     printf("Using Sudoku Maker, you can create or solve any valid sudoku board.\n");
-    printf("At any time, you may enter 'g' to generate a valid board, 'r' to restart, or 'e' to exit.\n");
+    printf("At any time, you may enter 'h' for help with commands.\n");
     printf("To begin, enter the letter 's' for start.\n");
 }
 
@@ -39,9 +40,18 @@ void printEndMessage() {
     printf("\nThank you for using Sudoku Maker!\n\n");
 }
 
+void printHelpMessage() {
+    printTitle();
+    printf("The following are single letter commands that you can enter at any time:\n");
+    printf("e - to exit the program\n");
+    printf("g - to automatically generate a valid board\n");
+    printf("h - to enter this help screen\n");
+    printf("s - to start or clear the board\n");
+}
+
 void printCommandErrorMessage() {
     printf("Sorry the command you entered isn't recognized.\n");
-    printf("Please enter the correct command to continue, 'r' to restart, or 'e' to exit.\n");
+    printf("Please enter the correct command to continue or enter 'h' for help.\n");
 }
 
 void printPrompt() {
@@ -112,7 +122,7 @@ void printNumSolutions(int count) {
     } else if (count <= 1000) {
         printf("There are %d solutions to this grid.\n", count);
     } else {
-        printf("There are 1000+ solutions to this grid.\n");
+        printf("There are 100,000+ solutions to this grid.\n");
     }
 }
 
