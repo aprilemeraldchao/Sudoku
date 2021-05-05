@@ -1,8 +1,7 @@
+#include "SudokuDefinitions.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#define EMPTY 0
 
 extern int grid[9][9];
 extern bool given[9][9];
@@ -15,6 +14,7 @@ void printEndMessage();
 void printHelpMessage();
 void printCommandErrorMessage();
 void printUnsolvableMessage();
+void printInvalidInputMessage(int row, int col, int num);
 void printPrompt();
 void printGrid();
 void printPanel(bool validated, double time_taken, int count);
@@ -58,6 +58,13 @@ void printCommandErrorMessage() {
 
 void printUnsolvableMessage() {
     printf("Sorry, you must enter a valid sudoku board (with exactly one solution) to use the solve command.\n");
+}
+
+void printInvalidInputMessage(int row, int col, int num) {
+    char rowChar = row + 'A';
+    col += 1;
+    printf("Sorry, your input <%c%d %d> was invalid.\n", rowChar, col, num);
+    printPrompt();
 }
 
 void printPrompt() {
@@ -129,7 +136,7 @@ void printNumSolutions(int count) {
     } else if (count <= 1000) {
         printf("There are %d solutions to this grid.\n", count);
     } else {
-        printf("There are 100,000+ solutions to this grid.\n");
+        printf("There are %d+ solutions to this grid.\n", MAX_SOLUTIONS);
     }
 }
 

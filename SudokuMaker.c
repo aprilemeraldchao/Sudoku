@@ -6,8 +6,9 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include "SudokuDefinitions.h"
 
-#define EMPTY 0
+
 
 int grid[9][9];
 bool given[9][9];
@@ -22,7 +23,7 @@ void showPanel();
 void resetGrid();
 void solveGrid();
 void genGrid();
-void updateGrid(int row, int col, int num, bool isGiven);
+bool updateGrid(int row, int col, int num, bool isGiven);
 
 int main(void) {
     printWelcomeMessage();
@@ -30,7 +31,6 @@ int main(void) {
     getchar();
 
     showPanel();
-
     handleInput();
 
     return 0;
@@ -87,8 +87,7 @@ void handleCellInput(char *cell) {
     scanf("%d", &num);
     if (row < 0 || row > 8 || col < 0 || col > 8 || num < EMPTY || num > 9) {
         printCommandErrorMessage();
-    } else {
-        updateGrid(row, col, num, true);
+    } else if (updateGrid(row, col, num, true)) {
         showPanel();
     }
 }
@@ -101,7 +100,7 @@ void showPanel() {
     int count = 0;
     if (numEntered >= 17) {
         t = clock();
-        getNumSolutions(0, 0, &count);
+        getNumSolutions(0, 0, &count, MAX_SOLUTIONS);
         t = clock() - t;
         time_taken = ((double)t) / CLOCKS_PER_SEC;
         validated = true;
@@ -191,12 +190,18 @@ void genGrid() {
     valid = true;
 }
 
-void updateGrid(int row, int col, int num, bool isGiven) {
-    if (num == EMPTY) {
-        numEntered -= 1;
-    } else if (grid[row][col] == EMPTY) {
-        numEntered += 1;
+bool updateGrid(int row, int col, int num, bool isGiven) {
+    if (isValidDeep(row, col, num)) {
+        if (num == EMPTY) {
+            numEntered -= 1;
+        } else if (grid[row][col] == EMPTY) {
+            numEntered += 1;
+        }
+        grid[row][col] = num;
+        given[row][col] = isGiven;
+        return true;
+    } else {
+        printInvalidInputMessage(row, col, num);
+        return false;
     }
-    grid[row][col] = num;
-    given[row][col] = isGiven;
 }
