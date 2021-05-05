@@ -13,15 +13,30 @@ int grid[9][9];
 bool given[9][9];
 bool valid;
 int numEntered;
+bool inHelp = false;
 
+void handleInput();
+void handleCommand(char command, bool *stop);
+void handleCellInput(char *cell);
 void showPanel();
 void resetGrid();
+void solveGrid();
 void genGrid();
 void updateGrid(int row, int col, int num, bool isGiven);
 
 int main(void) {
     printWelcomeMessage();
 
+    getchar();
+
+    showPanel();
+
+    handleInput();
+
+    return 0;
+}
+
+void handleInput() {
     bool stop = false;
     while (!stop) {
         char *input = malloc(2);
@@ -29,41 +44,53 @@ int main(void) {
         scanf("%s", input);
 
         if (strlen(input) == 1) {
-            char command = input[0];
-            if (command == 'e') {
-                printEndMessage();
-                stop = true;
-            } else if (command == 's') {
-                resetGrid();
-                showPanel();
-            } else if (command == 'g') {
-                resetGrid();
-                genGrid();
-                showPanel();
-            } else if (command == 'h') {
-                printHelpMessage();
-            } else if (command != '\n') {
-                printCommandErrorMessage();
-            }
+            handleCommand(input[0], &stop);
         } else if (strlen(input) == 2) {
-            char rowChar;
-            int col, num;
-            sscanf(input, "%c%d", &rowChar, &col);
-            int row = rowChar - 'A';
-            col--;
-            scanf("%d", &num);
-            if (row < 0 || row > 8 || col < 0 || col > 8 || num < EMPTY || num > 9) {
-                printCommandErrorMessage();
-            } else {
-                updateGrid(row, col, num, true);
-                showPanel();
-            }
+            handleCellInput(input);
         } else {
             printCommandErrorMessage();
         }
     }
+}
 
-    return 0;
+void handleCommand(char command, bool *stop) {
+    if (command == 'e') {
+        printEndMessage();
+        *stop = true;
+    } else if (command == 'r') {
+        resetGrid();
+        showPanel();
+    } else if (command == 'g') {
+        resetGrid();
+        genGrid();
+        showPanel();
+    } else if (command == 'h') {
+        if (inHelp) {
+            showPanel();
+        } else {
+            printHelpMessage();
+        }
+        inHelp = !inHelp;
+    } else if (command == 's') {
+        solveGrid();
+    } else if (command != '\n') {
+        printCommandErrorMessage();
+    }
+}
+
+void handleCellInput(char *cell) {
+    char rowChar;
+    int col, num;
+    sscanf(cell, "%c%d", &rowChar, &col);
+    int row = rowChar - 'A';
+    col--;
+    scanf("%d", &num);
+    if (row < 0 || row > 8 || col < 0 || col > 8 || num < EMPTY || num > 9) {
+        printCommandErrorMessage();
+    } else {
+        updateGrid(row, col, num, true);
+        showPanel();
+    }
 }
 
 void showPanel() {
@@ -91,6 +118,15 @@ void resetGrid() {
             grid[row][col] = EMPTY;
             given[row][col] = false;
         }
+    }
+}
+
+void solveGrid() {
+    if (valid) {
+        genSolution(0, 0);
+        showPanel();
+    } else {
+        printUnsolvableMessage();
     }
 }
 

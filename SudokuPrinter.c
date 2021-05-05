@@ -14,13 +14,14 @@ void printWelcomeMessage();
 void printEndMessage();
 void printHelpMessage();
 void printCommandErrorMessage();
+void printUnsolvableMessage();
 void printPrompt();
 void printGrid();
 void printPanel(bool validated, double time_taken, int count);
 void printNumSolutions(int count);
 void printBold(char *str);
 void printGray(char *str);
-void printCyan(char *str);
+void printGiven(char *str);
 void clear();
 
 void printTitle() {
@@ -33,7 +34,7 @@ void printWelcomeMessage() {
     printf("Welcome to Sudoku Maker!\n\n");
     printf("Using Sudoku Maker, you can create or solve any valid sudoku board.\n");
     printf("At any time, you may enter 'h' for help with commands.\n");
-    printf("To begin, enter the letter 's' for start.\n");
+    printf("To begin, hit enter.\n");
 }
 
 void printEndMessage() {
@@ -45,17 +46,23 @@ void printHelpMessage() {
     printf("The following are single letter commands that you can enter at any time:\n");
     printf("e - to exit the program\n");
     printf("g - to automatically generate a valid board\n");
-    printf("h - to enter this help screen\n");
-    printf("s - to start or clear the board\n");
+    printf("h - to enter/exit this help screen\n");
+    printf("r - to reset or clear the board\n");
+    printf("s - to solve the board (board must be valid)\n");
 }
 
 void printCommandErrorMessage() {
-    printf("Sorry the command you entered isn't recognized.\n");
+    printf("Sorry, the command you entered isn't recognized.\n");
     printf("Please enter the correct command to continue or enter 'h' for help.\n");
 }
 
+void printUnsolvableMessage() {
+    printf("Sorry, you must enter a valid sudoku board (with exactly one solution) to use the solve command.\n");
+}
+
 void printPrompt() {
-    printf("Please enter a cell followed by a number 0-9 (ie 'A1 1'): ");
+    printf("Please enter a command or 1+ cells separated by spaces (ie 'A1 1 B2 2'): ");
+    fflush(stdout);
 }
 
 void printGrid() {
@@ -84,7 +91,7 @@ void printGrid() {
             } else if (given[row][col]) {
                 char *str;
                 sprintf(str, " %d ", num);
-                printCyan(str);
+                printGiven(str);
             } else {
                 printf(" %d ", num);
             }
@@ -134,8 +141,8 @@ void printGray(char *str) {
     printf("\e[90m%s\e[0m", str);
 }
 
-void printCyan(char *str) {
-    printf("\e[36m%s\e\x1B[0m", str);
+void printGiven(char *str) {
+    printf("\e[1;34m%s\e[0m", str);
 }
 void clear() {
     system("clear");

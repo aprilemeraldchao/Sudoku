@@ -4,8 +4,33 @@
 #define EMPTY 0
 extern int grid[9][9];
 
+bool genSolution(int row, int col);
 void getNumSolutions(int row, int col, int *count);
 bool isValid(int row, int col, int num);
+
+bool genSolution(int row, int col) {
+    if (row == 8 && col == 9) {
+        return true;
+    }
+    if (col == 9) {
+        col = 0;
+        row += 1;
+    }
+    if (grid[row][col] == EMPTY) {
+        for (int i = 0; i < 9; i++) {
+            if (isValid(row, col, i + 1)) {
+                grid[row][col] = i + 1;
+                if (genSolution(row, col + 1)) {
+                    return true;
+                }
+            }
+        }
+        grid[row][col] = EMPTY;
+        return false;
+    } else {
+        return genSolution(row, col + 1);
+    }
+}
 
 void getNumSolutions(int row, int col, int *count) {
     if (row == 8 && col == 9) {
