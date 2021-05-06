@@ -16,15 +16,21 @@ bool unique;
 int numGivens;
 // inHelp - boolean value used to toggle the help page
 bool inHelp = false;
+// undoQueue - 2D int array to hold the previous versions of cells for undo functionality
+int undoQueue[UNDO_SIZE][3];
+// undoPtr - index of most recent undo entry
+int undoPtr = 0;
 
 // SudokuMaker - contains the following functions to handle input and manipulate the sudoku board
 void handleInput();                                       // handles all of the user input
 void handleCommand(char command, bool *stop);             // handles single letter commands
 void handleCellInput(char *cell);                         // handles cell location and number inputs
-void resetGrid();                                         // clears the board
+void reset();                                             // clears the board and resets all the states
 bool solveGrid();                                         // solves board if the board is unique
 void genGrid();                                           // generates a valid board
 bool updateGrid(int row, int col, int num, bool isGiven); // updates a cell in the board
+void addToUndoQueue(int row, int col, int num);           // saves the previous version of the modified cell in the undo queue
+bool undoLastCellAssignment();                            //undoes the last cell assignment
 
 int main(void) {
     printWelcomeMessage();
@@ -75,12 +81,12 @@ void handleCommand(char command, bool *stop) {
         *stop = true;
     } else if (command == 'r') {
         //clear board
-        resetGrid();
+        reset();
 
         printPanel();
     } else if (command == 'g') {
         //generate valid board
-        resetGrid();
+        reset();
         genGrid();
 
         printPanel();
@@ -102,6 +108,16 @@ void handleCommand(char command, bool *stop) {
         //if not solved, print error message
         if (!solved) {
             printUnsolvableMessage();
+        }
+    } else if (command == 'u') {
+        //attempt to undo last cell assignment
+        bool undid = undoLastCellAssignment();
+
+        printPanel();
+
+        //if couldn't undo, print error message
+        if (!undid) {
+            printUnableToUndoMessage();
         }
     } else if (command != '\n') {
         printCommandErrorMessage();
@@ -133,11 +149,11 @@ void handleCellInput(char *cell) {
 }
 
 // clears the board
-void resetGrid() {
+void reset() {
     //set unique to false since the board is empty
     unique = false;
 
-    //update grid and given vars
+    //reset grid and given vars
     numGivens = 0;
     for (int row = 0; row < 9; row++) {
         for (int col = 0; col < 9; col++) {
@@ -145,6 +161,9 @@ void resetGrid() {
             given[row][col] = false;
         }
     }
+
+    //reset undo queue
+    undoPtr = 0;
 }
 
 // solves board if the board is unique
@@ -234,6 +253,9 @@ bool updateGrid(int row, int col, int num, bool isGiven) {
             numGivens += 1;
         } //if filled a non empty cell, number of givens doesn't change
 
+        //add entry to undo queue
+        addToUndoQueue(row, col, grid[row][col]);
+
         //update grid and given
         grid[row][col] = num;
         given[row][col] = isGiven;
@@ -245,4 +267,43 @@ bool updateGrid(int row, int col, int num, bool isGiven) {
         printInvalidInputMessage(row, col, num);
         return false;
     }
+}
+
+// saves the previous version of the modified cell in the undo queue
+void addToUndoQueue(int row, int col, int num) {
+    if (undoPtr == UNDO_SIZE) {
+        //if undo queue is full, make shift each entry down one to make space
+        for (int i = 0; i < UNDO_SIZE - 1; i++) {
+            for (int j = 0; j < 3; j++) {
+                undoQueue[i][j] = undoQueue[i + 1][j];
+            }
+        }
+        undoPtr -= 1;
+    }
+    undoQueue[undoPtr][0] = row;
+    undoQueue[undoPtr][1] = col;
+    undoQueue[undoPtr][2] = num;
+    undoPtr += 1;
+}
+
+//undoes the last cell assignment
+bool undoLastCellAssignment() {
+    if (undoPtr == 0) {
+        //if undo queue is empty, can't undo
+        return false;
+    }
+
+    //move pointer to most recent entry
+    undoPtr -= 1;
+
+    //get last undo entry
+    int row = undoQueue[undoPtr][0];
+    int col = undoQueue[undoPtr][1];
+    int num = undoQueue[undoPtr][2];
+
+    //reset cell to previous value
+    grid[row][col] = num;
+
+    //signal that undo occurred
+    return true;
 }

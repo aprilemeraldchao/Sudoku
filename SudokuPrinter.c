@@ -24,6 +24,7 @@ void printHelpMessage();                                  // prints help page
 void printCommandErrorMessage();                          // prints error message for when input is not recognized
 void printUnsolvableMessage();                            // prints error message for when user attempts to use solver on non-unique board
 void printInvalidInputMessage(int row, int col, int num); // prints error message for when user attempts to set a given that will break the puzzle
+void printUnableToUndoMessage();                          // prints error message for when user attempts to undo when there are no moves to undo
 void printPrompt();                                       // prints default prompt message to enter cell(s)
 void printGrid();                                         // prints the sudoku board
 void printPanel();                                        // prints the default panel, including the title, grid, number of solutions, elapsed time, and prompt
@@ -65,6 +66,7 @@ void printHelpMessage() {
     printf("h - to enter/exit this help screen\n");
     printf("r - to reset or clear the board\n");
     printf("s - to solve the board (board must be valid)\n");
+    printf("u - to undo the last cell assignment you made\n");
 }
 
 // prints error message for when input is not recognized
@@ -75,7 +77,7 @@ void printCommandErrorMessage() {
 
 // prints error message for when user attempts to use solver on non-unique board
 void printUnsolvableMessage() {
-    printf("Sorry, you must enter a valid sudoku board (with exactly one solution) to use the solve command.\n");
+    printf("\nSorry, you must enter a valid sudoku board (with exactly one solution) to use the solve command.\n");
 }
 
 // prints error message for when user attempts to set a given that will break the puzzle
@@ -86,6 +88,11 @@ void printInvalidInputMessage(int row, int col, int num) {
 
     printf("Sorry, your input <%c%d %d> was invalid.\n", rowChar, col, num);
     printPrompt();
+}
+
+// prints error message for when user attempts to undo when there are no moves to undo
+void printUnableToUndoMessage() {
+    printf("\nSorry, you have no moves to undo.\n");
 }
 
 // prints default prompt message to enter cell(s)
