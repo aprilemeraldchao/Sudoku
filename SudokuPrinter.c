@@ -107,7 +107,7 @@ void printCantOverrideGivenMessage() {
 
 // prints error message for when user attempts to enter pencil mode for a non-unique board
 void printUnableToEnterPencilModeMessage() {
-    printf("\nSorry, you can only enter pencil mode when your board is valid and has a unique solution.\n");
+    printf("Sorry, you can only enter pencil mode when your board is valid and has a unique solution.\n");
 }
 
 // prints default prompt message to enter cell(s)
