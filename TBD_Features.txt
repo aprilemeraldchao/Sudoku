@@ -7,3 +7,4 @@
 - add mode indication
 - color-code messages
 - add message when already in mode
+- add number of errors and empty spaces in pencil mode

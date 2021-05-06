@@ -13,8 +13,6 @@ extern bool correct[9][9];
 bool genSolution(int row, int col);                          // resolves the board with recursive backtracking
 bool markSolution(int row, int col);                         // marks incorrect cells with recursive backtracking
 void getNumSolutions(int row, int col, int *count, int max); // calculates the number of solutions of the current board (up to the max) with recursive backtracking
-int getNumErrors();                                          // counts the number of errors in the current board
-int getNumEmptyCells();                                      // counts the number of empty cells in the current board
 bool isValidShallow(int row, int col, int num);              // does a shallow check of the cell (verifies it is unique within the row, column, and box)
 bool isValidDeep(int row, int col, int num);                 // does a deep check of the cell (verifies there is at least one solution)
 
@@ -145,32 +143,6 @@ void getNumSolutions(int row, int col, int *count, int max) {
         //if cell is already filled, skip it
         getNumSolutions(row, col + 1, count, max);
     }
-}
-
-// counts the number of errors in the current board
-int getNumErrors() {
-    int count = 0;
-
-    for (int row = 0; row < 9; row++) {
-        for (int col = 0; col < 9; col++) {
-            count += !correct[row][col];
-        }
-    }
-
-    return count;
-}
-
-// counts the number of empty cells in the current board
-int getNumEmptyCells() {
-    int count = 0;
-
-    for (int row = 0; row < 9; row++) {
-        for (int col = 0; col < 9; col++) {
-            count += grid[row][col] == EMPTY;
-        }
-    }
-
-    return count;
 }
 
 // does a shallow check of the cell (verifies it is unique within the row, column, and box)
