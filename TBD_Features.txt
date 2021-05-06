@@ -1,5 +1,3 @@
 - 'g' to generate a valid board (not hardcoded)
-- color-code messages
-- add number of errors and empty spaces in pencil mode
 - 'a' to add random valid given cell
 

@@ -15,6 +15,7 @@ extern int solved;
 bool genSolution(int row, int col);                          // resolves the board with recursive backtracking
 bool markSolution(int row, int col);                         // marks incorrect cells with recursive backtracking
 void getNumSolutions(int row, int col, int *count, int max); // calculates the number of solutions of the current board (up to the max) with recursive backtracking
+void getNumErrors(int *errors, int *emptyCells);             // counts the number of errors and empty cells in the current board
 bool isValidShallow(int row, int col, int num);              // does a shallow check of the cell (verifies it is unique within the row, column, and box)
 bool isValidDeep(int row, int col, int num);                 // does a deep check of the cell (verifies there is at least one solution)
 
@@ -145,6 +146,21 @@ void getNumSolutions(int row, int col, int *count, int max) {
     } else {
         //if cell is already filled, skip it
         getNumSolutions(row, col + 1, count, max);
+    }
+}
+
+// counts the number of errors and empty cells in the current board
+void getNumErrors(int *errors, int *emptyCells) {
+    for (int row = 0; row < 9; row++) {
+        for (int col = 0; col < 9; col++) {
+            if (!correct[row][col]) {
+                if (grid[row][col] == EMPTY) {
+                    *emptyCells += 1;
+                } else {
+                    *errors += 1;
+                }
+            }
+        }
     }
 }
 

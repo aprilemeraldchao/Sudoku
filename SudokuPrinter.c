@@ -270,7 +270,10 @@ void printPanel() {
         }
     } else {
         //print blurb about solved state of board
-        printSolvingState();
+        int errors = 0;
+        int emptyCells = 0;
+        getNumErrors(&errors, &emptyCells);
+        printSolvingState(errors, emptyCells);
     }
 
     //prompt user for cell input
@@ -309,11 +312,15 @@ void printNumSolutions(int count) {
 }
 
 //prints blurb about solution state of the board
-void printSolvingState() {
+void printSolvingState(int errors, int emptyCells) {
     if (solved == CORRECT) {
         printGreen("Congrats! You've solved this board!\n");
     } else if (solved == WRONG) {
         printError("Sorry, it doesn't look like you have the right answer.\n");
+        char *str = malloc(sizeof(char) * 50);
+        sprintf(str, "There are %d errors and %d empty cells left.\n", errors, emptyCells);
+        printGray(str);
+        free(str);
     }
 }
 
