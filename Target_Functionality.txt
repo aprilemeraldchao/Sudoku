@@ -29,4 +29,4 @@
     - any entry that modifies a red cell should make that cell white
 6. in help page
     - all inputs should exit page
-7. '0' should erase cell contents
+#7. '0' should erase cell contents
