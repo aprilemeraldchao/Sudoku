@@ -38,7 +38,8 @@ void printPrompt();                                       // prints default prom
 void printGrid();                                         // prints the sudoku board
 void printPanel();                                        // prints the default panel, including the title, grid, number of solutions, elapsed time, and prompt
 void printNumSolutions(int count);                        // prints blurb about solutions depending on count
-void printSolvingState();                                 //prints blurb about solution state of the board
+void printSolvingState();                                 // prints blurb about solution state of the board
+void printError(char *str);                               // prints a thin red string
 void printBold(char *str);                                // prints a bold white string
 void printGray(char *str);                                // prints a thin grey string
 void printBlue(char *str);                                // prints a bold blue string
@@ -48,9 +49,9 @@ void clear();                                             // clears the console
 // prints header
 void printTitle() {
     clear();
-    printf(" ------------ Sudoku Maker ------------\n");
+    printBold(" ------------ Sudoku Maker ------------\n");
     if (pencilMode) {
-        printf("            ~ Pencil Mode ~\n\n");
+        printGray("            ~ Pencil Mode ~\n\n");
     } else {
         printf("\n\n");
     }
@@ -61,13 +62,13 @@ void printWelcomeMessage() {
     printTitle();
     printf("Welcome to Sudoku Maker!\n\n");
     printf("Using Sudoku Maker, you can create or solve any valid sudoku board.\n");
-    printf("To see a list of commands, you may enter 'h' for help.\n");
-    printf("To begin, hit enter.\n");
+    printf("To see a list of commands, you may enter 'h' for help.\n\n");
+    printBold("To begin, hit enter.\n");
 }
 
 // prints exit message
 void printEndMessage() {
-    printf("\nThank you for using Sudoku Maker!\n\n");
+    printBlue("\nThank you for using Sudoku Maker!\n\n");
 }
 
 // prints help page
@@ -76,7 +77,7 @@ void printHelpMessage() {
     inHelp = true;
 
     printTitle();
-    printf("The following are single letter commands that you can enter at any time:\n");
+    printBold("The following are single letter commands that you can enter at any time:\n");
     printf("c - to check the current board and highlight the incorrect cells (only in pencil mode)\n");
     printf("e - to exit the program\n");
     printf("g - to automatically generate a valid board\n");
@@ -86,18 +87,18 @@ void printHelpMessage() {
     printf("r - to reset or clear the board\n");
     printf("s - to solve the board (board must be valid)\n");
     printf("u - to undo the last cell assignment you made\n");
-    printf("*note - to erase a cell, set enter the number 0 (ie 'A1 0')\n");
+    printBlue("\n*note - to erase a cell, set enter the number 0 (ie 'A1 0')\n");
 }
 
 // prints error message for when input is not recognized
 void printCommandErrorMessage() {
-    printf("Sorry, the command you entered isn't recognized.\n");
+    printError("Sorry, the command you entered isn't recognized.\n");
     printf("Please enter the correct command to continue or enter 'h' for help.\n");
 }
 
 // prints error message for when user attempts to use solver on non-unique board
 void printUnsolvableMessage() {
-    printf("\nSorry, you must enter a valid sudoku board (with exactly one solution) to use the solve command.\n");
+    printError("\nSorry, you must enter a valid sudoku board (with exactly one solution) to use the solve command.\n");
 }
 
 // prints error message for when user attempts to set a given that will break the puzzle
@@ -106,33 +107,37 @@ void printInvalidInputMessage(int row, int col, int num) {
     char rowChar = row + 'A';
     col += 1;
 
-    printf("Sorry, your input <%c%d %d> was invalid.\n", rowChar, col, num);
+    char *str;
+    sprintf(str, "Sorry, your input <%c%d %d> was invalid.\n", rowChar, col, num);
+    printError(str);
     printPrompt();
 }
 
 // prints error message for when user attempts to undo when there are no moves to undo
 void printUnableToUndoMessage() {
-    printf("\nSorry, you have no moves to undo.\n");
+    printError("\nSorry, you have no moves to undo.\n");
 }
 
 // prints error message for when user attempts to change given cell in pencil mode
 void printCantOverrideGivenMessage() {
-    printf("Sorry, you can't update a given cell in pencil mode.\n");
+    printError("Sorry, you can't update a given cell in pencil mode.\n");
 }
 
 // prints error message for when user attempts to enter pencil mode for a non-unique board
 void printUnableToEnterPencilModeMessage() {
-    printf("Sorry, you can only enter pencil mode when your board is valid and has a unique solution.\n");
+    printError("Sorry, you can only enter pencil mode when your board is valid and has a unique solution.\n");
 }
 
 // prints error message for when user attempts to check the board while not in pencil mode
 void printUnableToCheckMessage() {
-    printf("\nSorry, you can only check the board when you are in pencil mode.");
+    printError("\nSorry, you can only check the board when you are in pencil mode.");
 }
 
 // prints default prompt message to enter cell(s)
 void printPrompt() {
-    printf("Please enter a command or 1+ cells separated by spaces (ie 'A1 1 B2 2'): ");
+    printBold("\nPlease enter a command or 1+ cells separated by spaces (ie 'A1 1 B2 2'): ");
+
+    //ensure newline is printed after input
     fflush(stdout);
 }
 
@@ -203,7 +208,7 @@ void printGrid() {
     }
 
     //print bottom border
-    printBold("  +-----------+-----------+-----------+\n");
+    printBold("  +-----------+-----------+-----------+\n\n");
 }
 
 // prints the default panel, including the title, grid, number of solutions, elapsed time, and prompt
@@ -287,6 +292,11 @@ void printSolvingState() {
     } else if (solved == WRONG) {
         printf("Sorry, it doesn't look like you have the right answer.\n");
     }
+}
+
+// prints a thin red string
+void printError(char *str) {
+    printf("\e[31m%s\e[0m", str);
 }
 
 // prints a bold white string
