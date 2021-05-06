@@ -1,6 +1,5 @@
 - 'c' to check grid in pencil mode
     - add # errors found
-    - change errors to red
     - change errors back when they are overwritten
 - 'm' to switch back to make mode
     - clears nongivens

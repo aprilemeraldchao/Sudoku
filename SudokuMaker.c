@@ -296,8 +296,14 @@ bool updateGrid(int row, int col, int num, bool isGiven) {
             //add entry to undo queue
             addToUndoQueue(row, col, grid[row][col]);
 
+            //reset correct if the number changed
+            if (grid[row][col] != num) {
+                correct[row][col] = true;
+            }
+
             //update grid
             grid[row][col] = num;
+
             return true;
         }
     } else if (isValidDeep(row, col, num)) {
