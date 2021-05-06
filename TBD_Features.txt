@@ -1,7 +1,5 @@
 - 'c' to check grid in pencil mode
     - add # errors found
-- 'm' to switch back to make mode
-    - clears nongivens
 - add message when solved in pencil mode
 - 'a' to add random valid given cell
 - 'g' to generate a valid board (not hardcoded)

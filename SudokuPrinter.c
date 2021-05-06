@@ -73,6 +73,7 @@ void printHelpMessage() {
     printf("e - to exit the program\n");
     printf("g - to automatically generate a valid board\n");
     printf("h - to enter/exit this help screen\n");
+    printf("m - to exit pencil mode (clears your pencil marks)\n");
     printf("p - to enter pencil mode where you can attempt to solve the board yourself\n");
     printf("r - to reset or clear the board\n");
     printf("s - to solve the board (board must be valid)\n");

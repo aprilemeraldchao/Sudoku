@@ -119,6 +119,11 @@ void handleCommand(char command, bool *stop) {
         if (!solved) {
             printUnsolvableMessage();
         }
+    } else if (command == 'm') {
+        //switch back to make mode
+        exitPencilMode();
+
+        printPanel();
     } else if (command == 'u') {
         //attempt to undo last cell assignment
         bool undid = undoLastCellAssignment();
