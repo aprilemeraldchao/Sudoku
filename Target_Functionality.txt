@@ -1,0 +1,28 @@
+1. 'enter' on the welcome screen enters the program.
+2. at any time
+    - 'h' should toggle the help page
+    - 'e' should send end message and exit
+    - 'g' should overwrite the entire board with a preexisting valid board
+    - 'r' should clear the board
+3. with invalid board (with multiple solutions)
+    - 'c' should send error message
+    - 'p' should send error message
+    - 's' should send error message
+    - 'u' should undo up to certain # moves
+    - any entry that doesn't break the puzzle updates
+4. with valid board (with unique solution)
+    - 'c' should send error message
+    - 'p' should enter pencil mode and clear all pencil marks
+    - 's' should resolve the board
+    - 'u' should undo up to certain # moves
+5. in pencil mode
+    - 'g' should overwrite but stay in pencil mode
+    - 'r' should exit pencil mode
+    - 'm' should exit pencil mode and clear all pencil marks
+    - 's' should exit pencil mode
+    - 'u' should undo up to certain # moves
+    - any entry that doesn't overlap with a given cell updates
+    - 'c' should highlight incorrect cells and tell whether or not the solution is correct
+6. in help page
+    - all inputs should exit the page
+7. '0' should erase the cell contents
