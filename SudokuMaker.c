@@ -133,6 +133,7 @@ void handleCommand(char command, bool *stop) {
         bool undid = undoLastCellAssignment();
 
         printPanel();
+        
 
         //if couldn't undo, print error message
         if (!undid) {
