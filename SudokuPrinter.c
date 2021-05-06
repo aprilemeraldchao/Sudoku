@@ -186,25 +186,25 @@ void printGrid() {
         //print each cell in the row
         for (int col = 0; col < 9; ++col) {
             int num = grid[row][col];
+
+            //format string to print in proper color
+            char *str = malloc(sizeof(char) * 3);
+            sprintf(str, " %d ", num);
+
             if (num == EMPTY) {
                 //if cell is not set, print empty space
                 printf("   ");
             } else if (given[row][col]) {
                 //if cell is a given, print the number in blue
-                char *str = malloc(sizeof(char) * 3);
-                sprintf(str, " %d ", num);
                 printBlue(str);
-                free(str);
             } else if (!correct[row][col]) {
                 //if cell is incorrect, print the number in red
-                char *str = malloc(sizeof(char) * 3);
-                sprintf(str, " %d ", num);
                 printRed(str);
-                free(str);
             } else {
                 //if cell is not a give, print the number in white
-                printf(" %d ", num);
+                printGray(str);
             }
+            free(str);
 
             if (col % 3 == 2) {
                 //if at the rightmost column of a column group, print bold separator

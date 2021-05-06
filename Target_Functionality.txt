@@ -1,4 +1,4 @@
-#Basic test cases
+#basic test cases
 1. 'enter' on welcome screen enters program.
 2. at any time
     - 'h' should toggle help page
