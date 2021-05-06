@@ -4,6 +4,8 @@
 
 // grid - 9x9 int array to hold contents of each cell in the sudoku board
 extern int grid[9][9];
+// given - 9x9 boolean array to hold the type of each cell (true = a given number, false = a penciled number)
+extern bool given[9][9];
 
 // SudokuSolver - contains the following functions to handle all validations and calculations
 bool genSolution(int row, int col);                          // resolves the board with recursive backtracking
@@ -24,7 +26,7 @@ bool genSolution(int row, int col) {
         row += 1;
     }
 
-    if (grid[row][col] == EMPTY) {
+    if (!given[row][col]) {
         //if cell is empty, try each number 1-9
         for (int i = 0; i < 9; i++) {
             //check if setting this will immediately break the puzzle

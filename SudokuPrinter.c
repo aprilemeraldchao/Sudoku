@@ -15,6 +15,8 @@ extern bool unique;
 extern int numGivens;
 // inHelp - boolean value used to toggle the help page
 extern bool inHelp;
+// pencilMode - if true, all inputs are treated are no longer treated as givens
+extern bool pencilMode;
 
 // SudokuPrinter - contains the following functions to print the UI and send messages to the user
 void printTitle();                                        // prints header
@@ -25,6 +27,8 @@ void printCommandErrorMessage();                          // prints error messag
 void printUnsolvableMessage();                            // prints error message for when user attempts to use solver on non-unique board
 void printInvalidInputMessage(int row, int col, int num); // prints error message for when user attempts to set a given that will break the puzzle
 void printUnableToUndoMessage();                          // prints error message for when user attempts to undo when there are no moves to undo
+void printCantOverrideGivenMessage();                     // prints error message for when user attempts to change given cell in pencil mode
+void printUnableToEnterPencilModeMessage();               // prints error message for when user attempts to enter pencil mode for a non-unique board
 void printPrompt();                                       // prints default prompt message to enter cell(s)
 void printGrid();                                         // prints the sudoku board
 void printPanel();                                        // prints the default panel, including the title, grid, number of solutions, elapsed time, and prompt
@@ -64,6 +68,7 @@ void printHelpMessage() {
     printf("e - to exit the program\n");
     printf("g - to automatically generate a valid board\n");
     printf("h - to enter/exit this help screen\n");
+    printf("p - to enter pencil mode where you can attempt to solve the board yourself\n");
     printf("r - to reset or clear the board\n");
     printf("s - to solve the board (board must be valid)\n");
     printf("u - to undo the last cell assignment you made\n");
@@ -93,6 +98,16 @@ void printInvalidInputMessage(int row, int col, int num) {
 // prints error message for when user attempts to undo when there are no moves to undo
 void printUnableToUndoMessage() {
     printf("\nSorry, you have no moves to undo.\n");
+}
+
+// prints error message for when user attempts to change given cell in pencil mode
+void printCantOverrideGivenMessage() {
+    printf("Sorry, you can't update a given cell in pencil mode.\n");
+}
+
+// prints error message for when user attempts to enter pencil mode for a non-unique board
+void printUnableToEnterPencilModeMessage() {
+    printf("\nSorry, you can only enter pencil mode when your board is valid and has a unique solution.\n");
 }
 
 // prints default prompt message to enter cell(s)
@@ -182,7 +197,7 @@ void printPanel() {
     int count = 0;
 
     //only calculate number of solutions if there are at least 17 givens (17+ are needed for a unique solution)
-    if (numGivens >= 17) {
+    if (numGivens >= 17 && !pencilMode) {
         //set t to time when started calculation
         t = clock();
 
@@ -201,12 +216,15 @@ void printPanel() {
     printTitle();
     printGrid();
 
-    //print blurb about solutions depending on count
-    printNumSolutions(count);
+    if (!pencilMode) {
 
-    //if calculation occurred, print elapsed time for calculation
-    if (validated) {
-        printf("It took %f seconds to check your board.\n", time);
+        //print blurb about solutions depending on count
+        printNumSolutions(count);
+
+        //if calculation occurred, print elapsed time for calculation
+        if (validated) {
+            printf("It took %f seconds to check your board.\n", time);
+        }
     }
 
     //prompt user for cell input

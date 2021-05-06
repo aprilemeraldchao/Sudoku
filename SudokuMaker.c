@@ -20,6 +20,8 @@ bool inHelp = false;
 int undoQueue[UNDO_SIZE][3];
 // undoPtr - index of most recent undo entry
 int undoPtr = 0;
+// pencilMode - if true, all inputs are treated are no longer treated as givens
+bool pencilMode = false;
 
 // SudokuMaker - contains the following functions to handle input and manipulate the sudoku board
 void handleInput();                                       // handles all of the user input
@@ -85,8 +87,10 @@ void handleCommand(char command, bool *stop) {
 
         printPanel();
     } else if (command == 'g') {
-        //generate valid board
+        //clear board
         reset();
+
+        //generate valid board
         genGrid();
 
         printPanel();
@@ -100,6 +104,9 @@ void handleCommand(char command, bool *stop) {
             printHelpMessage();
         }
     } else if (command == 's') {
+        //exit pencil mode
+        pencilMode = false;
+
         //attempt to solve board
         bool solved = solveGrid();
 
@@ -118,6 +125,19 @@ void handleCommand(char command, bool *stop) {
         //if couldn't undo, print error message
         if (!undid) {
             printUnableToUndoMessage();
+        }
+    } else if (command == 'p') {
+        //attempt to enter pencil mode
+        if (unique) {
+            pencilMode = true;
+
+            printPanel();
+
+            //reset undo queue
+            undoPtr = 0;
+        } else {
+            //if not unique, print error message
+            printUnableToEnterPencilModeMessage();
         }
     } else if (command != '\n') {
         printCommandErrorMessage();
@@ -242,9 +262,21 @@ void genGrid() {
 
 // updates a cell in the board
 bool updateGrid(int row, int col, int num, bool isGiven) {
-    //if updating the board won't break the puzzle
-    if (isValidDeep(row, col, num)) {
-        //update the number of givens
+    if (pencilMode) {
+        //if in pencil mode, only check if update will override a given cell
+        if (given[row][col]) {
+            printCantOverrideGivenMessage();
+            return false;
+        } else {
+            //add entry to undo queue
+            addToUndoQueue(row, col, grid[row][col]);
+
+            //update grid
+            grid[row][col] = num;
+            return true;
+        }
+    } else if (isValidDeep(row, col, num)) {
+        //if updating the board won't break the puzzle, update the number of givens
         if (num == EMPTY) {
             //delete a given
             numGivens -= 1;
