@@ -38,11 +38,12 @@ void printPrompt();                                       // prints default prom
 void printGrid();                                         // prints the sudoku board
 void printPanel();                                        // prints the default panel, including the title, grid, number of solutions, elapsed time, and prompt
 void printNumSolutions(int count);                        // prints blurb about solutions depending on count
-void printSolvingState();                                 //prints blurb about solution state of the board
+void printSolvingState();                                 // prints blurb about solution state of the board
 void printBold(char *str);                                // prints a bold white string
 void printGray(char *str);                                // prints a thin grey string
 void printBlue(char *str);                                // prints a bold blue string
 void printRed(char *str);                                 // prints a bold red string
+void printError(char *str);                               // prints a thin red string
 void clear();                                             // clears the console
 
 // prints header
@@ -307,6 +308,11 @@ void printBlue(char *str) {
 // prints a bold red string
 void printRed(char *str) {
     printf("\e[1;31m%s\e[0m", str);
+}
+
+// prints a thin red string
+void printError(char *str) {
+    printf("\e[31m%s\e[0m", str);
 }
 
 // clears the console

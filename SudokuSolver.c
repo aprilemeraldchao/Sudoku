@@ -97,7 +97,7 @@ bool markSolution(int row, int col) {
         }
 
         //if didn't find a solution, reset the cell
-        grid[row][col] = EMPTY;
+        grid[row][col] = prev;
 
         //return to parent for backtracking
         return false;
