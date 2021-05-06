@@ -13,6 +13,8 @@ extern bool given[9][9];
 extern bool correct[9][9];
 // unique - boolean value to keep track of state of board (true = there is a unique solution, false = there are multiple solutions)
 extern bool unique;
+// solved - int value to keep track of state of the board (WRONG,CHECKED,CORRECT)
+extern int solved;
 // numGivens - int value to keep track of the number of givens inputted so far (at least 17 are needed for a unique solution)
 extern int numGivens;
 // inHelp - boolean value used to toggle the help page
@@ -36,6 +38,7 @@ void printPrompt();                                       // prints default prom
 void printGrid();                                         // prints the sudoku board
 void printPanel();                                        // prints the default panel, including the title, grid, number of solutions, elapsed time, and prompt
 void printNumSolutions(int count);                        // prints blurb about solutions depending on count
+void printSolvingState();                                 //prints blurb about solution state of the board
 void printBold(char *str);                                // prints a bold white string
 void printGray(char *str);                                // prints a thin grey string
 void printBlue(char *str);                                // prints a bold blue string
@@ -240,6 +243,9 @@ void printPanel() {
         if (validated) {
             printf("It took %f seconds to check your board.\n", time);
         }
+    } else {
+        //print blurb about solved state of board
+        printSolvingState();
     }
 
     //prompt user for cell input
@@ -265,6 +271,15 @@ void printNumSolutions(int count) {
     } else {
         //number of solutions exceeded maximum
         printf("There are %d+ solutions to this grid.\n", MAX_SOLUTIONS);
+    }
+}
+
+//prints blurb about solution state of the board
+void printSolvingState() {
+    if (solved == CORRECT) {
+        printf("Congrats! You've solved this board!\n");
+    } else if (solved == WRONG) {
+        printf("Sorry, it doesn't look like you have the right answer.\n");
     }
 }
 

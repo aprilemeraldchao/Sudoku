@@ -14,6 +14,8 @@ bool given[9][9];
 bool correct[9][9];
 // unique - boolean value to keep track of state of board (true = there is a unique solution, false = there are multiple solutions)
 bool unique;
+// solved - int value to keep track of state of the board (WRONG,CHECKED,CORRECT)
+int solved;
 // numGivens - int value to keep track of the number of givens inputted so far (at least 17 are needed for a unique solution)
 int numGivens;
 // inHelp - boolean value used to toggle the help page
@@ -113,12 +115,12 @@ void handleCommand(char command, bool *stop) {
         exitPencilMode();
 
         //attempt to solve board
-        bool solved = solveGrid();
+        bool isSolved = solveGrid();
 
         printPanel();
 
         //if not solved, print error message
-        if (!solved) {
+        if (!isSolved) {
             printUnsolvableMessage();
         }
     } else if (command == 'm') {
@@ -192,6 +194,7 @@ void handleCellInput(char *cell) {
 void reset() {
     //set unique to false since the board is empty
     unique = false;
+    solved = NOT_CHECKED;
 
     //reset grid, given, and correct arrays
     numGivens = 0;
@@ -221,6 +224,9 @@ bool solveGrid() {
 // checks the penciled cells in a board
 bool checkGrid() {
     if (pencilMode) {
+        //default solved to correct
+        solved = CORRECT;
+
         //highlights incorrect cells
         markSolution(0, 0);
 
@@ -306,6 +312,7 @@ bool updateGrid(int row, int col, int num, bool isGiven) {
             //reset correct if the number changed
             if (grid[row][col] != num) {
                 correct[row][col] = true;
+                solved = NOT_CHECKED;
             }
 
             //update grid

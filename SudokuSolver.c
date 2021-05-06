@@ -8,6 +8,8 @@ extern int grid[9][9];
 extern bool given[9][9];
 // correct - 9x9 boolean array to hold the validity of each cell (true = correct)
 extern bool correct[9][9];
+// solved - int value to keep track of state of the board (WRONG,CHECKED,CORRECT)
+extern int solved;
 
 // SudokuSolver - contains the following functions to handle all validations and calculations
 bool genSolution(int row, int col);                          // resolves the board with recursive backtracking
@@ -83,9 +85,10 @@ bool markSolution(int row, int col) {
                 //recursively check the next cell
                 if (markSolution(row, col + 1)) {
                     //if found a solution, compare to the initial value
-                    if (prev != EMPTY && prev != i + 1) {
+                    if (prev != i + 1) {
                         //if not correct, update correct array and revert cell
                         correct[row][col] = false;
+                        solved = WRONG;
                     }
                     grid[row][col] = prev;
                     return true;
