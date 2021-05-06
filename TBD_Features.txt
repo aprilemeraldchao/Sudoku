@@ -8,3 +8,4 @@
     - add line about erasing cells
 - add mode indication
 - color-code messages
+- add message when already in mode

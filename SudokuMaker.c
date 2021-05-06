@@ -86,6 +86,8 @@ void handleCommand(char command, bool *stop) {
         printEndMessage();
         *stop = true;
     } else if (command == 'r') {
+        exitPencilMode();
+
         //clear board
         reset();
 
