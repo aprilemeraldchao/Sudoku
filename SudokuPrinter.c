@@ -36,7 +36,7 @@ void printPrompt();                                       // prints default prom
 void printGrid();                                         // prints the sudoku board
 void printPanel();                                        // prints the default panel, including the title, grid, number of solutions, elapsed time, and prompt
 void printNumSolutions(int count);                        // prints blurb about solutions depending on count
-void printNumErrors(int count);                           // prints blurb about errors depending on count
+void printNumErrors(int errors, int emptyCells);          // prints blurb about errors depending on count
 void printBold(char *str);                                // prints a bold white string
 void printGray(char *str);                                // prints a thin grey string
 void printBlue(char *str);                                // prints a bold blue string
@@ -243,7 +243,7 @@ void printPanel() {
         }
     } else {
         //print blurb about errors depending on count
-        printNumErrors(getNumErrors());
+        printNumErrors(getNumErrors(), getNumEmptyCells());
     }
 
     //prompt user for cell input
@@ -273,8 +273,8 @@ void printNumSolutions(int count) {
 }
 
 // prints blurb about errors depending on count
-void printNumErrors(int count) {
-    printf("You have %d errors in your board remaining.\n");
+void printNumErrors(int errors, int emptyCells) {
+    printf("You have %d checked errors and %d empty cells in your board remaining.\n", errors, emptyCells);
 }
 
 // prints a bold white string
