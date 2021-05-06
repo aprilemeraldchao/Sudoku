@@ -48,7 +48,12 @@ void clear();                                             // clears the console
 // prints header
 void printTitle() {
     clear();
-    printf(" ------------ Sudoku Maker ------------ \n\n");
+    printf(" ------------ Sudoku Maker ------------\n");
+    if (pencilMode) {
+        printf("            ~ Pencil Mode ~\n\n");
+    } else {
+        printf("\n\n");
+    }
 }
 
 // prints start up message
@@ -81,6 +86,7 @@ void printHelpMessage() {
     printf("r - to reset or clear the board\n");
     printf("s - to solve the board (board must be valid)\n");
     printf("u - to undo the last cell assignment you made\n");
+    printf("*note - to erase a cell, set enter the number 0 (ie 'A1 0')\n");
 }
 
 // prints error message for when input is not recognized

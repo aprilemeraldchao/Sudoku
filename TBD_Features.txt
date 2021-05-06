@@ -1,10 +1,6 @@
-- add message when solved in pencil mode
-- 'a' to add random valid given cell
 - 'g' to generate a valid board (not hardcoded)
-- adjust help page
-    - separate modes
-    - add line about erasing cells
-- add mode indication
 - color-code messages
-- add message when already in mode
 - add number of errors and empty spaces in pencil mode
+- add message when already in mode
+- 'a' to add random valid given cell
+
