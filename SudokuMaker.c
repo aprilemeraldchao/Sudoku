@@ -10,6 +10,8 @@
 int grid[9][9];
 // given - 9x9 boolean array to hold the type of each cell (true = a given number, false = a penciled number)
 bool given[9][9];
+// correct - 9x9 boolean array to hold the validity of each cell (true = correct)
+bool correct[9][9];
 // unique - boolean value to keep track of state of board (true = there is a unique solution, false = there are multiple solutions)
 bool unique;
 // numGivens - int value to keep track of the number of givens inputted so far (at least 17 are needed for a unique solution)
@@ -29,6 +31,7 @@ void handleCommand(char command, bool *stop);             // handles single lett
 void handleCellInput(char *cell);                         // handles cell location and number inputs
 void reset();                                             // clears the board and resets all the states
 bool solveGrid();                                         // solves board if the board is unique
+bool checkGrid();                                         // checks the penciled cells in a board
 void genGrid();                                           // generates a valid board
 bool updateGrid(int row, int col, int num, bool isGiven); // updates a cell in the board
 void addToUndoQueue(int row, int col, int num);           // saves the previous version of the modified cell in the undo queue
@@ -139,6 +142,16 @@ void handleCommand(char command, bool *stop) {
             //if not unique, print error message
             printUnableToEnterPencilModeMessage();
         }
+    } else if (command == 'c') {
+        //attempt to solve board
+        bool checked = checkGrid();
+
+        printPanel();
+
+        //if not checked, print error message
+        if (!checked) {
+            printUnableToCheckMessage();
+        }
     } else if (command != '\n') {
         printCommandErrorMessage();
     }
@@ -173,12 +186,13 @@ void reset() {
     //set unique to false since the board is empty
     unique = false;
 
-    //reset grid and given vars
+    //reset grid, given, and correct arrays
     numGivens = 0;
     for (int row = 0; row < 9; row++) {
         for (int col = 0; col < 9; col++) {
             grid[row][col] = EMPTY;
             given[row][col] = false;
+            correct[row][col] = true;
         }
     }
 
@@ -191,6 +205,17 @@ bool solveGrid() {
     if (unique) {
         //fills board with solution
         genSolution(0, 0);
+
+        return true;
+    }
+    return false;
+}
+
+// checks the penciled cells in a board
+bool checkGrid() {
+    if (pencilMode) {
+        //highlights incorrect cells
+        markSolution(0, 0);
 
         return true;
     }

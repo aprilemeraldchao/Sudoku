@@ -6,9 +6,12 @@
 extern int grid[9][9];
 // given - 9x9 boolean array to hold the type of each cell (true = a given number, false = a penciled number)
 extern bool given[9][9];
+// correct - 9x9 boolean array to hold the validity of each cell (true = correct)
+extern bool correct[9][9];
 
 // SudokuSolver - contains the following functions to handle all validations and calculations
 bool genSolution(int row, int col);                          // resolves the board with recursive backtracking
+bool markSolution(int row, int col);                         // marks incorrect cells with recursive backtracking
 void getNumSolutions(int row, int col, int *count, int max); // calculates the number of solutions of the current board (up to the max) with recursive backtracking
 bool isValidShallow(int row, int col, int num);              // does a shallow check of the cell (verifies it is unique within the row, column, and box)
 bool isValidDeep(int row, int col, int num);                 // does a deep check of the cell (verifies there is at least one solution)
@@ -50,6 +53,54 @@ bool genSolution(int row, int col) {
     } else {
         //if cell is already filled, skip it
         return genSolution(row, col + 1);
+    }
+}
+
+// marks incorrect cells with recursive backtracking
+bool markSolution(int row, int col) {
+    //base case: reached the end of the board -> solved
+    if (row == 8 && col == 9) {
+        return true;
+    }
+
+    //if column overflow, move to next row
+    if (col == 9) {
+        col = 0;
+        row += 1;
+    }
+
+    if (!given[row][col]) {
+        //save initial number
+        int prev = grid[row][col];
+
+        //if cell is not given, try each number 1-9
+        for (int i = 0; i < 9; i++) {
+            //check if setting this will immediately break the puzzle
+            if (isValidShallow(row, col, i + 1)) {
+                //assume temporarily this number is right
+                grid[row][col] = i + 1;
+
+                //recursively check the next cell
+                if (markSolution(row, col + 1)) {
+                    //if found a solution, compare to the initial value
+                    if (prev != i + 1) {
+                        //if not correct, update correct array and revert cell
+                        correct[row][col] = false;
+                    }
+                    grid[row][col] = prev;
+                    return true;
+                }
+            }
+        }
+
+        //if didn't find a solution, reset the cell
+        grid[row][col] = EMPTY;
+
+        //return to parent for backtracking
+        return false;
+    } else {
+        //if cell is already filled, skip it
+        return markSolution(row, col + 1);
     }
 }
 

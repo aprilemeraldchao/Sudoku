@@ -1,0 +1,14 @@
+- 'c' to check grid in pencil mode
+    - add # errors found
+    - change errors to red
+    - change errors back when they are overwritten
+- 'm' to switch back to make mode
+    - clears nongivens
+- add message when solved in pencil mode
+- 'a' to add random valid given cell
+- 'g' to generate a valid board (not hardcoded)
+- adjust help page
+    - separate modes
+    - add line about erasing cells
+- add mode indication
+- color-code messages

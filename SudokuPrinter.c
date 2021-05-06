@@ -9,6 +9,8 @@
 extern int grid[9][9];
 // given - 9x9 boolean array to hold the type of each cell (true = a given number, false = a penciled number)
 extern bool given[9][9];
+// correct - 9x9 boolean array to hold the validity of each cell (true = correct)
+extern bool correct[9][9];
 // unique - boolean value to keep track of state of board (true = there is a unique solution, false = there are multiple solutions)
 extern bool unique;
 // numGivens - int value to keep track of the number of givens inputted so far (at least 17 are needed for a unique solution)
@@ -29,6 +31,7 @@ void printInvalidInputMessage(int row, int col, int num); // prints error messag
 void printUnableToUndoMessage();                          // prints error message for when user attempts to undo when there are no moves to undo
 void printCantOverrideGivenMessage();                     // prints error message for when user attempts to change given cell in pencil mode
 void printUnableToEnterPencilModeMessage();               // prints error message for when user attempts to enter pencil mode for a non-unique board
+void printUnableToCheckMessage();                         // prints error message for when user attempts to check the board while not in pencil mode
 void printPrompt();                                       // prints default prompt message to enter cell(s)
 void printGrid();                                         // prints the sudoku board
 void printPanel();                                        // prints the default panel, including the title, grid, number of solutions, elapsed time, and prompt
@@ -36,6 +39,7 @@ void printNumSolutions(int count);                        // prints blurb about 
 void printBold(char *str);                                // prints a bold white string
 void printGray(char *str);                                // prints a thin grey string
 void printBlue(char *str);                                // prints a bold blue string
+void printRed(char *str);                                 // prints a bold red string
 void clear();                                             // clears the console
 
 // prints header
@@ -65,6 +69,7 @@ void printHelpMessage() {
 
     printTitle();
     printf("The following are single letter commands that you can enter at any time:\n");
+    printf("c - to check the current board and highlight the incorrect cells (only in pencil mode)\n");
     printf("e - to exit the program\n");
     printf("g - to automatically generate a valid board\n");
     printf("h - to enter/exit this help screen\n");
@@ -108,6 +113,11 @@ void printCantOverrideGivenMessage() {
 // prints error message for when user attempts to enter pencil mode for a non-unique board
 void printUnableToEnterPencilModeMessage() {
     printf("Sorry, you can only enter pencil mode when your board is valid and has a unique solution.\n");
+}
+
+// prints error message for when user attempts to check the board while not in pencil mode
+void printUnableToCheckMessage() {
+    printf("\nSorry, you can only check the board when you are in pencil mode.");
 }
 
 // prints default prompt message to enter cell(s)
@@ -160,6 +170,11 @@ void printGrid() {
                 char *str;
                 sprintf(str, " %d ", num);
                 printBlue(str);
+            } else if (!correct[row][col]) {
+                //if cell is incorrect, print the number in red
+                char *str;
+                sprintf(str, " %d ", num);
+                printRed(str);
             } else {
                 //if cell is not a give, print the number in white
                 printf(" %d ", num);
@@ -266,6 +281,11 @@ void printGray(char *str) {
 // prints a bold blue string
 void printBlue(char *str) {
     printf("\e[1;34m%s\e[0m", str);
+}
+
+// prints a bold red string
+void printRed(char *str) {
+    printf("\e[1;31m%s\e[0m", str);
 }
 
 // clears the console
