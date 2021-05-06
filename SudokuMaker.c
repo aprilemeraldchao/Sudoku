@@ -35,7 +35,8 @@ bool checkGrid();                                         // checks the penciled
 void genGrid();                                           // generates a valid board
 bool updateGrid(int row, int col, int num, bool isGiven); // updates a cell in the board
 void addToUndoQueue(int row, int col, int num);           // saves the previous version of the modified cell in the undo queue
-bool undoLastCellAssignment();                            //undoes the last cell assignment
+bool undoLastCellAssignment();                            // undoes the last cell assignment
+void exitPencilMode();                                    // sets mode back to default and clears pencil marks
 
 int main(void) {
     printWelcomeMessage();
@@ -107,8 +108,7 @@ void handleCommand(char command, bool *stop) {
             printHelpMessage();
         }
     } else if (command == 's') {
-        //exit pencil mode
-        pencilMode = false;
+        exitPencilMode();
 
         //attempt to solve board
         bool solved = solveGrid();
@@ -369,4 +369,18 @@ bool undoLastCellAssignment() {
 
     //signal that undo occurred
     return true;
+}
+
+// sets mode back to default and clears pencil marks
+void exitPencilMode() {
+    pencilMode = false;
+
+    for (int row = 0; row < 9; row++) {
+        for (int col = 0; col < 9; col++) {
+            if (!given[row][col]) {
+                grid[row][col] = EMPTY;
+                correct[row][col] = true;
+            }
+        }
+    }
 }
