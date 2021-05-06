@@ -181,11 +181,17 @@ void handleCellInput(char *cell) {
     int row = rowChar - 'A';
     col--;
 
+    //make sure the cell location is within range
+    if (row < 0 || row > 8 || col < 0 || col > 8) {
+        printCommandErrorMessage();
+        return;
+    }
+
     //get the number (to put in the cell)
     scanf("%d", &num);
 
-    //make sure the cell location and number are within range
-    if (row < 0 || row > 8 || col < 0 || col > 8 || num < EMPTY || num > 9) {
+    //make sure the number is within range
+    if (num < EMPTY || num > 9) {
         printCommandErrorMessage();
     } else if (updateGrid(row, col, num, true)) {
         //if cell was updated, print the updated grid
@@ -303,6 +309,7 @@ void genGrid() {
 
 // updates a cell in the board
 bool updateGrid(int row, int col, int num, bool isGiven) {
+    printf("");
     if (pencilMode) {
         //if in pencil mode, only check if update will override a given cell
         if (given[row][col]) {
@@ -383,6 +390,9 @@ bool undoLastCellAssignment() {
 
     //reset cell to previous value
     grid[row][col] = num;
+
+    //assume no longer unique with modification
+    unique = false;
 
     //signal that undo occurred
     return true;

@@ -42,7 +42,8 @@ void printSolvingState();                                 // prints blurb about 
 void printBold(char *str);                                // prints a bold white string
 void printGray(char *str);                                // prints a thin grey string
 void printBlue(char *str);                                // prints a bold blue string
-void printGreen(char *str);                               // prints a bold green string
+void printGreen(char *str);                               // prints a thin green string
+void printYellow(char *str);                              // prints a thin yellow string
 void printRed(char *str);                                 // prints a bold red string
 void printError(char *str);                               // prints a thin red string
 void clear();                                             // clears the console
@@ -51,11 +52,10 @@ void clear();                                             // clears the console
 void printTitle() {
     clear();
     printBold(" ------------ Sudoku Maker ------------\n");
-    if (pencilMode) {
-        printf("            ~ Pencil Mode ~\n\n");
-    } else {
-        printf("\n\n");
+    if (pencilMode && !inHelp) {
+        printGray("            ~ Pencil Mode ~");
     }
+    printf("\n\n");
 }
 
 // prints start up message
@@ -79,15 +79,24 @@ void printHelpMessage() {
 
     printTitle();
     printBlue("The following are single letter commands that you can enter at any time:\n\n");
-    printf("c - to check the current board and highlight the incorrect cells (only in pencil mode)\n");
-    printf("e - to exit the program\n");
-    printf("g - to automatically generate a valid board\n");
-    printf("h - to enter/exit this help screen\n");
-    printf("m - to exit pencil mode (clears your pencil marks)\n");
-    printf("p - to enter pencil mode where you can attempt to solve the board yourself\n");
-    printf("r - to reset or clear the board\n");
-    printf("s - to solve the board (board must be valid)\n");
-    printf("u - to undo the last cell assignment you made\n");
+    printf("c");
+    printGray(" - to check the current board and highlight the incorrect cells (only in pencil mode)\n");
+    printf("e");
+    printGray(" - to exit the program\n");
+    printf("g");
+    printGray(" - to automatically generate a valid board\n");
+    printf("h");
+    printGray(" - to enter/exit this help screen\n");
+    printf("m");
+    printGray(" - to exit pencil mode (clears your pencil marks)\n");
+    printf("p");
+    printGray(" - to enter pencil mode where you can attempt to solve the board yourself\n");
+    printf("r");
+    printGray(" - to reset or clear the board\n");
+    printf("s");
+    printGray(" - to solve the board (board must be valid)\n");
+    printf("u");
+    printGray(" - to undo the last cell assignment you made\n");
     // printf("*note - to erase a cell, set enter the number 0 (ie 'A1 0')\n");
 }
 
@@ -108,9 +117,10 @@ void printInvalidInputMessage(int row, int col, int num) {
     char rowChar = row + 'A';
     col += 1;
 
-    char *str;
+    char *str = malloc(sizeof(char) * 45);
     sprintf(str, "Sorry, your input <%c%d %d> was invalid.\n", rowChar, col, num);
     printError(str);
+    free(str);
     printPrompt();
 }
 
@@ -181,14 +191,16 @@ void printGrid() {
                 printf("   ");
             } else if (given[row][col]) {
                 //if cell is a given, print the number in blue
-                char *str;
+                char *str = malloc(sizeof(char) * 3);
                 sprintf(str, " %d ", num);
                 printBlue(str);
+                free(str);
             } else if (!correct[row][col]) {
                 //if cell is incorrect, print the number in red
-                char *str;
+                char *str = malloc(sizeof(char) * 3);
                 sprintf(str, " %d ", num);
                 printRed(str);
+                free(str);
             } else {
                 //if cell is not a give, print the number in white
                 printf(" %d ", num);
@@ -251,7 +263,10 @@ void printPanel() {
 
         //if calculation occurred, print elapsed time for calculation
         if (validated) {
-            printf("It took %f seconds to check your board.\n", time);
+            char *str = malloc(sizeof(char) * 50);
+            sprintf(str, "It took %.5f seconds to check your board.\n", time);
+            printGray(str);
+            free(str);
         }
     } else {
         //print blurb about solved state of board
@@ -266,21 +281,30 @@ void printPanel() {
 void printNumSolutions(int count) {
     if (unique && count == 1) {
         //sudoku board was already valid
-        printf("This is a valid sudoku board!\n");
+        printGreen("This is a valid sudoku board!\n");
     } else if (numGivens < 17) {
         //not enough givens for a valid solution
-        printf("You need at least %d more numbers to make a valid sudoku board.\n", 17 - numGivens);
+        char *str = malloc(sizeof(char) * 70);
+        sprintf(str, "You need at least %d more numbers to make a valid sudoku board.\n", 17 - numGivens);
+        printYellow(str);
+        free(str);
     } else if (!unique && count == 1) {
         //sudoku board just became valid
-        printf("You've made a valid sudoku board!\n");
+        printGreen("You've made a valid sudoku board!\n");
         unique = true;
     } else if (count == 0) {
-        printf("This sudoku board is impossible to solve...\n");
+        printRed("This sudoku board is impossible to solve...\n");
     } else if (count < MAX_SOLUTIONS) {
-        printf("There are %d solutions to this grid.\n", count);
+        char *str = malloc(sizeof(char) * 50);
+        sprintf(str, "There are %d solutions to this grid.\n", count);
+        printYellow(str);
+        free(str);
     } else {
         //number of solutions exceeded maximum
-        printf("There are %d+ solutions to this grid.\n", MAX_SOLUTIONS);
+        char *str = malloc(sizeof(char) * 50);
+        sprintf(str, "There are %d+ solutions to this grid.\n", MAX_SOLUTIONS);
+        printYellow(str);
+        free(str);
     }
 }
 
@@ -308,9 +332,14 @@ void printBlue(char *str) {
     printf("\e[1;34m%s\e[0m", str);
 }
 
-// prints a bold green string
+// prints a thin green string
 void printGreen(char *str) {
-    printf("\e[1;32m%s\e[0m", str);
+    printf("\e[0;32m%s\e[0m", str);
+}
+
+// prints a thin yellow string
+void printYellow(char *str) {
+    printf("\e[0;33m%s\e[0m", str);
 }
 
 // prints a bold red string

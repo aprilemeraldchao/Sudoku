@@ -1,19 +1,21 @@
-1. 'enter' on the welcome screen enters the program.
+#Basic test cases
+1. 'enter' on welcome screen enters program.
 2. at any time
-    - 'h' should toggle the help page
+    - 'h' should toggle help page
     - 'e' should send end message and exit
-    - 'g' should overwrite the entire board with a preexisting valid board
-    - 'r' should clear the board
+    - 'g' should overwrite entire board with a preexisting valid board
+    - 'r' should clear board
 3. with invalid board (with multiple solutions)
     - 'c' should send error message
     - 'p' should send error message
     - 's' should send error message
     - 'u' should undo up to certain # moves
-    - any entry that doesn't break the puzzle updates
+    - any entry that doesn't break puzzle updates
+    - any entry that would break puzzle should send error message
 4. with valid board (with unique solution)
     - 'c' should send error message
     - 'p' should enter pencil mode and clear all pencil marks
-    - 's' should resolve the board
+    - 's' should resolve board
     - 'u' should undo up to certain # moves
 5. in pencil mode
     - 'g' should overwrite but stay in pencil mode
@@ -22,7 +24,9 @@
     - 's' should exit pencil mode
     - 'u' should undo up to certain # moves
     - any entry that doesn't overlap with a given cell updates
-    - 'c' should highlight incorrect cells and tell whether or not the solution is correct
+    - any entry that does overlap should send error message
+    - 'c' should highlight incorrect cells and tell whether or not solution is correct
+    - any entry that modifies a red cell should make that cell white
 6. in help page
-    - all inputs should exit the page
-7. '0' should erase the cell contents
+    - all inputs should exit page
+7. '0' should erase cell contents
